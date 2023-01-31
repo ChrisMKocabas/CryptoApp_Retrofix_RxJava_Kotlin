@@ -20,20 +20,8 @@ class RecyclerViewAdapter (private val cryptoList : ArrayList<CryptoModel>, priv
     private val colors: Array<String> = arrayOf("#FBED85","#C2D3CC","#A0DBF7","#E0F7A0","#DCC4FA","#FFB2B2")
 
     //accept a binding object for view binding
-    class RowHolder(private val binding: RowLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        //create a bind 
-        fun bind(cryptoModel:CryptoModel, colors:Array<String>,position: Int, listener: Listener) = with(binding) {
-            itemView.setOnClickListener{
-                listener.onItemClick(cryptoModel)
-            }
-            itemView.setBackgroundColor(Color.parseColor(colors[position % 6]))
-            textName.text = cryptoModel.symbol
-            textPrice.text = cryptoModel.price
-        }
+    class RowHolder(val binding: RowLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
     }
-
-
 
     // create and return the view holder using recycler row
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RowHolder {
@@ -47,7 +35,14 @@ class RecyclerViewAdapter (private val cryptoList : ArrayList<CryptoModel>, priv
     }
 
     override fun onBindViewHolder(holder: RowHolder, position: Int) {
-        holder.bind(cryptoList[position],colors,position,listener)
+        holder.itemView.setOnClickListener{
+            listener.onItemClick(cryptoList[position])
+        }
+        holder.itemView.setBackgroundColor(Color.parseColor(colors[position % 6]))
+
+        holder.binding.textName.text = cryptoList[position].symbol
+        holder.binding.textPrice.text = cryptoList[position].price
+
     }
 
 }
